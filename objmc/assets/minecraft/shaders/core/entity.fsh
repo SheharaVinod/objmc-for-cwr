@@ -8,7 +8,12 @@ uniform sampler2D Sampler0;
 
 in float sphericalVertexDistance;
 in float cylindricalVertexDistance;
+#ifdef PER_FACE_LIGHTING
+in vec4 vertexPerFaceColorBack;
+in vec4 vertexPerFaceColorFront;
+#else
 in vec4 vertexColor;
+#endif
 
 in vec4 lightColor;
 in vec4 overlayColor;

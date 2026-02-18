@@ -1,9 +1,9 @@
 #version 150
 
 #moj_import <minecraft:fog.glsl>
-#moj_import <minecraft:dynamictransforms.glsl>
-#moj_import <minecraft:projection.glsl>
 #moj_import <minecraft:globals.glsl>
+#moj_import <minecraft:chunksection.glsl>
+#moj_import <minecraft:projection.glsl>
 
 in vec3 Position;
 in vec4 Color;
@@ -34,7 +34,7 @@ vec4 minecraft_sample_lightmap(sampler2D lightMap, ivec2 uv) {
 }
 
 void main() {
-    Pos = Position + ModelOffset;
+    Pos = Position + (ChunkPosition - CameraBlockPos) + CameraOffset;
     vertexColor = Color;
     lightColor = minecraft_sample_lightmap(Sampler2, UV2);
     texCoord = UV0;

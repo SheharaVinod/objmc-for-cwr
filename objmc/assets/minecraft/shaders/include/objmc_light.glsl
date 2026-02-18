@@ -3,14 +3,19 @@
 
 //default lighting
 if (isCustom == 0) {
-    color *= vertexColor * ColorModulator;
 #ifndef EMISSIVE
     color *= lightColor;
+#endif
+#ifdef PER_FACE_LIGHTING
+    color *= (gl_FrontFacing ? vertexPerFaceColorFront : vertexPerFaceColorBack);
+#else
+    color *= vertexColor;
 #endif
 #ifdef ENTITY
 #ifndef NO_OVERLAY
     color.rgb = mix(overlayColor.rgb, color.rgb, overlayColor.a);
 #endif
+    color *= ColorModulator;
 #endif
 }
 //custom lighting
@@ -33,5 +38,5 @@ else if (noshadow == 0) {
     color *= minecraft_mix_light(Light0_Direction, Light1_Direction, normal, overlayColor);
 #endif
 
-    color *= lightColor * ColorModulator;
+    color *= lightColor;
 }
