@@ -343,7 +343,7 @@ js = {}
 def newelement(out, index, x, y, ty):
     cube = {
         "from": [8, 0, 8],
-        "to": [8.000001, 0.000001, 8.000001],
+        "to": [24, 16, 8],
         "faces": {
             "north": {
                 "uv": getheader(out, index, x, y, ty),

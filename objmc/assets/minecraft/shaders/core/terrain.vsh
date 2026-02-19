@@ -1,4 +1,5 @@
-#version 150
+#version 450
+#extension GL_KHR_shader_subgroup_quad: enable
 
 #moj_import <minecraft:fog.glsl>
 #moj_import <minecraft:globals.glsl>
