@@ -1,8 +1,6 @@
 {
   "pack": {
-    "pack_format": 75,
-    "min_format": 75,
-    "max_format": 75,
+    "pack_format": 42,
     "description": "example objmc pack"
   }
 }
