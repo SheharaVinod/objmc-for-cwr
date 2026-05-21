@@ -58,6 +58,12 @@ if (marker == ivec4(12,34,56,78) || marker == ivec4(12,34,56,79)) {
     if (!visibility.x) { //world
         Pos = vec3(0); posoffset = vec3(0);
     } else {
+        if (isCustom == 1) {
+            Pos = (ModelViewMat * vec4(Pos + posoffset, 1.0)).xyz;
+            posoffset = vec3(0);
+            isCustom = 2;
+        }
+    }
 #endif
 #ifdef ENTITY
     isGUI = int(isgui(ProjMat));
@@ -184,21 +190,26 @@ if (marker == ivec4(12,34,56,78) || marker == ivec4(12,34,56,79)) {
             posoffset.zy *= -1;
             posoffset = rotate(rotation + vec3(0,1,0)) * posoffset;
         }
-        if (isHand == 1) {
-            posoffset.zx *= -1;
-            posoffset = (vec4(posoffset,0) * ModelViewMat).xyz;
-        }
-        if (isHand + isGUI == 0) {
-            if (any(greaterThan(autorotate,vec2(0)))) {
-                //normal estimated rotation calculation from The Der Discohund
-                float yaw = -atan(Normal.x, Normal.z);
-                float pitch = -atan(Normal.y, length(Normal.xz));
-                posoffset = rotate(vec3(vec2(pitch,yaw)*autorotate,0) + rotation) * posoffset;
+        else {
+            if (isHand == 0) {
+                if (any(greaterThan(autorotate,vec2(0)))) {
+                    //normal estimated rotation calculation from The Der Discohund
+                    float yaw = -atan(Normal.x, Normal.z);
+                    float pitch = -atan(Normal.y, length(Normal.xz));
+                    posoffset = rotate(vec3(vec2(pitch,yaw)*autorotate,0) + rotation) * posoffset;
+                }
+                //pure color rotation
+                else {
+                    posoffset = rotate(rotation) * posoffset;
+                }
             }
-            //pure color rotation
-            else {
-                posoffset = rotate(rotation) * posoffset;
+            else { // isHand == 1
+                posoffset.zx *= -1;
             }
+            // Final transformation to camera space
+            Pos = (ModelViewMat * vec4(Pos + posoffset, 1.0)).xyz;
+            posoffset = vec3(0);
+            isCustom = 2;
         }
     }
 #endif

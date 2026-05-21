@@ -48,8 +48,14 @@ void main() {
     //objmc
     #define ENTITY
     #define HEAD
-    #moj_import<objmc_head.glsl>
+    #moj_import <objmc_head.glsl>
 
-    gl_Position = ProjMat * ModelViewMat * vec4(Pos, 1.0);
-    vertexDistance = fog_distance(Pos, FogShape);
+    if (isCustom == 2) {
+        gl_Position = ProjMat * vec4(Pos, 1.0);
+        vertexDistance = fog_distance(Pos, FogShape);
+    } else {
+        vec4 pos_cam = ModelViewMat * vec4(Pos, 1.0);
+        gl_Position = ProjMat * pos_cam;
+        vertexDistance = fog_distance(pos_cam.xyz, FogShape);
+    }
 }

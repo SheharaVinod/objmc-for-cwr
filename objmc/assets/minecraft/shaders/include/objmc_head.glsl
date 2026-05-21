@@ -35,7 +35,14 @@ if (textureSize(Sampler0, 0) == vec2(64) && (marker == ivec4(12,34,56,78) || mar
 
     posoffset = (posoffset - vec3(0.5)) * scale;
     //final pos and uv
-    Pos += posoffset;
+    if (isGUI == 0) {
+        Pos = (ModelViewMat * vec4(Pos + posoffset, 1.0)).xyz;
+        posoffset = vec3(0);
+        isCustom = 2;
+    }
+    else {
+        Pos += posoffset;
+    }
     texCoord = clamp(vec2(texCoord.x, 1-texCoord.y)/2., 0.0001, 0.4999)
                 //make sure that faces with same uv beginning/ending renders
                 + onepixel*vec2(0.0001*corner, 0.0001*((corner + 1) % 4));
