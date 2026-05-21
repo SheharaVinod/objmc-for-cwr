@@ -298,26 +298,24 @@ def indexvert(o, vert):
 
 # index obj
 def indexobj(o, frame, nframes, nfaces):
-    for faceid in range(0, len(o["faces"])):
-        if faceid % 1000 == 0:
+    for face in range(0, len(o["faces"])):
+        if face % 1000 == 0:
             print(
                 "\Reading obj ",
                 frame + 1,
                 " of ",
                 nframes,
                 "...",
-                "{:>15.2f}".format((frame * nfaces + faceid) * 100 / (nframes * nfaces)),
+                "{:>15.2f}".format((frame * nfaces + face) * 100 / (nframes * nfaces)),
                 "%\033[K",
                 sep="",
                 end="\r",
             )
-        face = o["faces"][faceid]
-        for vert in face[:4]:
+        face = o["faces"][face]
+        for vert in face:
             indexvert(o, vert)
         if len(face) == 3:
             indexvert(o, face[1])
-        if len(face) > 4:
-            print(col.warn + "Found N-Gon" + col.end)
 
 
 # unique pixel uv per face with color pointing to topleft
@@ -343,7 +341,7 @@ js = {}
 def newelement(out, index, x, y, ty):
     cube = {
         "from": [8, 0, 8],
-        "to": [24, 16, 8],
+        "to": [8.000001, 0.000001, 8.000001],
         "faces": {
             "north": {
                 "uv": getheader(out, index, x, y, ty),
@@ -700,8 +698,11 @@ def objmc(
 
     # generate json model elements and uv header
     global js
+    texture_path = output[1].split(".")[0]
+    if ":" not in texture_path:
+        texture_path = "cwresports:" + texture_path
     js = {
-        "textures": {"0": output[1].split(".")[0]},
+        "textures": {"0": texture_path},
         "elements": [],
         "display": {
             "thirdperson_righthand": {"rotation": [85, 0, 0]},
